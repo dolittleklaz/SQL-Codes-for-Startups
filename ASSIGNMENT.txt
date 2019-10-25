@@ -1,0 +1,23 @@
+QUESTION 1
+SELECT FirstName
+FROM SalesLT.Customer
+WHERE FirstName like'R%'
+
+
+QUESTION 2
+
+SELECT LastName
+FROM SalesLT.Customer
+WHERE LastName like'%R%'
+
+QUESTION 3
+SELECT * 
+FROM SalesLT.Customer
+WHERE Phone like'710%'
+
+QUESTION 4
+
+SELECT Name AS Productname,productID,ListPrice, StandardCost, 
+(ListPrice-StandardCost) AS Profit, ((ListPrice-StandardCost)/ ListPrice) *100 AS profitpercentage
+FROM SalesLT.Product
+WHERE   ((ListPrice-StandardCost)/ ListPrice) *100 > 100
