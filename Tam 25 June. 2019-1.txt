@@ -1,0 +1,20 @@
+SELECT *
+FROM SalesLT.Customer
+WHERE FirstName like 'R%'
+ORDER BY FirstName;
+
+SELECT *
+FROM SalesLT.Customer
+WHERE LastName like '%S%'
+ORDER BY LastName;
+
+SELECT *
+FROM SalesLT.Customer 
+WHERE Phone LIKE '710%'
+ORDER BY Phone;
+
+ SELECT Name, ProductNumber, StandardCost, ListPrice, 
+ (ListPrice-StandardCost) AS Profit, ((ListPrice-StandardCost)/StandardCost)*100 AS PROFIT_PERCENTAGE
+ FROM SalesLT.Product
+ WHERE ((ListPrice-StandardCost)/StandardCost)*100 > 100
+ ORDER BY ((ListPrice-StandardCost)/StandardCost)*100;
