@@ -1,0 +1,139 @@
+DROP DATABASE TAM
+
+CREATE DATABASE TAM
+
+USE TAM
+
+
+---To Create the Customer Table
+CREATE TABLE CustomerTest (
+    CustomerID INT NOT NULL,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    Email VARCHAR(255),
+    PhoneNumber INT NOT NULL,
+    CustomerAddress VARCHAR(255) NOT NULL
+    PRIMARY KEY (CustomerID)
+);
+----To Populate the first table
+INSERT INTO CustomerTest values (1, 'Jane','Ralph','janeralph@keku.com', 0809555,'1 Emekuku Street');
+INSERT INTO CustomerTest values (2, 'Mike','Okoko','mikeokoko@keku.com', 08095755,'3 Mbiama Street');
+INSERT INTO CustomerTest values (3, 'Innoson','Otedola','ego@keku.com', 090966555,'1 Money way');
+INSERT INTO CustomerTest values (4, 'Idiami','Uganda','idiami@uganda.com', 0907789555,'1 Uganda Street');
+INSERT INTO CustomerTest values (5, 'Messoma','Adenuga','adenuga@keku.com', 080978,'2 Money Way');
+INSERT INTO CustomerTest values (6, 'Tobi','Koker','Kokertobi@keku.com', 0809555,'6 Tunji Lalana Way')
+
+
+
+---To Create the Customer Order Table
+CREATE TABLE CustomerOrderTest (
+    CustomerID INT NOT NULL,
+    OrderID INT NOT NULL,
+    OrderDate DATE NOT NULL,
+    Quantity INT NOT NULL,
+    OrderDescription VARCHAR(255),
+    PRIMARY KEY (CustomerID,OrderID),
+	FOREIGN KEY (CustomerID) REFERENCES CustomerTest(CustomerID),
+ 
+);
+
+
+----To Populate the Second table
+INSERT INTO CustomerOrderTest values (1, 4, '2019-02-12',4, 'online');
+INSERT INTO CustomerOrderTest values (2, 3, '2019-11-17',1, 'online');
+INSERT INTO CustomerOrderTest values (3, 5, '2012-09-15',41, 'online');
+INSERT INTO CustomerOrderTest values (4, 6, '2019-05-22',8, 'online');
+INSERT INTO CustomerOrderTest values (5, 2, '2015-07-28',14, 'online');
+INSERT INTO CustomerOrderTest values (6, 4, '2015-09-09',4, 'online');
+INSERT INTO CustomerOrderTest values (4, 3, '2018-08-19',54, 'online');
+INSERT INTO CustomerOrderTest values (2, 3, '2008-05-20',42, 'online');
+INSERT INTO CustomerOrderTest values (1, 1, '2017-10-19',24, 'online');
+INSERT INTO CustomerOrderTest values (3, 6, '2014-04-14',34, 'online');
+INSERT INTO CustomerOrderTest values (5, 3, '2015-11-17',2, 'online');
+INSERT INTO CustomerOrderTest values (6, 3, '2013-12-17',5, 'online')
+
+
+---To Create the Third Table
+CREATE TABLE ProductTest (
+    ProductID INT NOT NULL,
+    ProductName VARCHAR(255),
+    ProductDescription VARCHAR(255)
+    PRIMARY KEY (ProductID)
+);
+
+----To Populate the third table
+INSERT INTO ProductTest values (1, 'Vaseline', 'Body Cream');
+INSERT INTO ProductTest values (2, 'Pears baby Oil', 'Baby Cream');
+INSERT INTO ProductTest values (3, 'IPhone 7', 'Phone');
+INSERT INTO ProductTest values (4, 'Towel', 'House');
+INSERT INTO ProductTest values (5, 'PolyStar Washing Machine', 'Appliance');
+INSERT INTO ProductTest values (6, 'Blurthooth Headset', 'Gadjet')
+
+
+---To Create the Fourth Table
+CREATE TABLE ItemTest (
+    ProductID INT NOT NULL,
+    CustomerID INT NOT NULL,
+    OrderID INT NOT NULL,
+    OrderAmount INT NOT NULL,
+    TransactionDate DATE,
+    ShipDate DATE,
+    PRIMARY KEY (ProductID,CustomerID,OrderID),
+	FOREIGN KEY (CustomerID,OrderID) REFERENCES CustomerOrderTest(CustomerID,OrderID)
+
+);
+
+
+----To Populate the Fourth table
+INSERT INTO ItemTest values(1, 1, 1, 24000, '2017-10-19', '2017-10-29');
+INSERT INTO ItemTest values(3, 5, 2, 2000, '2018-10-09', '2013-12-20');
+INSERT INTO ItemTest values(5, 1, 4, 90000, '2018-01-09', '2014-12-11');
+INSERT INTO ItemTest values(6, 2, 3, 70000, '2018-09-09', '2019-11-21');
+INSERT INTO ItemTest values(4, 4, 3, 490000, '2018-10-09', '2018-12-20');
+INSERT INTO ItemTest values(2, 4, 6, 4032000, '2018-10-09', '2018-02-20');
+
+---To Create the Fifth Table
+CREATE TABLE ManufacturerTest (
+    ManufacturerName VARCHAR(255), 
+	ManufacuturerID INT NOT NULL,
+    ProductID INT NOT NULL,
+    PRIMARY KEY (ManufacuturerID,ProductID),
+	FOREIGN KEY (ProductID) REFERENCES ProductTest(ProductID)
+
+	);
+	
+
+INSERT INTO ManufacturerTest values ('Tam Corp', 2, 1);
+INSERT INTO ManufacturerTest values ('Tam Corp', 2, 2);
+INSERT INTO ManufacturerTest values ('Apple', 1, 3);
+INSERT INTO ManufacturerTest values ('JaneFash', 3, 4); 
+INSERT INTO ManufacturerTest values ('Polystar', 4, 5);
+INSERT INTO ManufacturerTest values ('Polystar', 4, 6) 
+
+
+
+---To Create the sixth Table
+CREATE TABLE PaymentTest (
+    Paymenttype VARCHAR(255), 
+	PaymentID INT NOT NULL,
+    OrderID INT NOT NULL,
+    PRIMARY KEY (PaymentID,OrderID),
+	FOREIGN KEY (OrderID) REFERENCES ItemTest(OrderID),
+
+	);
+
+--- To check if all Tables would display
+Select * from CustomerTest
+Select * from CustomerOrderTest
+Select * from ProductTest
+Select * from ItemTest
+SELECT * FROM ManufacturerTest
+
+
+---- I did Inner Join here
+SELECT *
+FROM CustomerTest
+INNER JOIN ItemTest
+ON CustomerTest.CustomerID = ItemTest.CustomerID
+INNER JOIN CustomerOrderTest
+ON CustomerTest.CustomerID = CustomerOrderTest.CustomerID;
