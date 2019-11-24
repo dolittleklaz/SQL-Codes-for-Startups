@@ -1,0 +1,169 @@
+CREATE DATABASE TAM
+USE TAM
+
+
+---To Create the first Table
+CREATE TABLE Customer (
+    CustomerID INT NOT NULL,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    Email VARCHAR(255),
+    PhoneNumber INT NOT NULL,
+    CustomerAddress VARCHAR(255) NOT NULL
+    PRIMARY KEY (CustomerID)
+);
+----To Populate the first table
+INSERT INTO Customer values (1, 'Jane','Ralph','janeralph@keku.com', 0809555,'1 Emekuku Street');
+INSERT INTO Customer values (2, 'Mike','Okoko','mikeokoko@keku.com', 08095755,'3 Mbiama Street');
+INSERT INTO Customer values (3, 'Innoson','Otedola','ego@keku.com', 090966555,'1 Money way');
+INSERT INTO Customer values (4, 'Idiami','Uganda','idiami@uganda.com', 0907789555,'1 Uganda Street');
+INSERT INTO Customer values (5, 'Messoma','Adenuga','adenuga@keku.com', 080978,'2 Money Way');
+INSERT INTO Customer values (6, 'Tobi','Koker','Kokertobi@keku.com', 0809555,'6 Tunji Lalana Way')
+
+DROP TABLE CustomerOrder
+CREATE TABLE CustomerOrder (
+    CustomerID INT NOT NULL,
+    OrderID INT NOT NULL,
+    OrderDate DATE NOT NULL,
+    Quantity INT NOT NULL,
+    OrderDescription VARCHAR(255),
+    PRIMARY KEY (CustomerID,OrderID),
+	FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+ 
+);
+
+----To Populate the Second table
+INSERT INTO CustomerOrder values (1, 4, '2019-02-12',4, 'PayPal');
+INSERT INTO CustomerOrder values (2, 3, '2019-11-17',1, 'Master');
+INSERT INTO CustomerOrder values (3, 5, '2012-09-15',41, 'VISA');
+INSERT INTO CustomerOrder values (4, 6, '2019-05-22',8, 'VERVE');
+INSERT INTO CustomerOrder values (5, 2, '2015-07-28',14, 'TamPay');
+INSERT INTO CustomerOrder values (6, 1, '2015-09-09',4, 'Payee');
+
+SELECT *  FROM CustomerOrder
+
+---To Create the Third Table
+CREATE TABLE Product (
+    ProductID INT NOT NULL,
+    ProductName VARCHAR(255),
+    ProductDescription VARCHAR(255)
+    PRIMARY KEY (ProductID)
+);
+
+----To Populate the third table
+INSERT INTO Product values (1, 'Vaseline', 'Body Cream');
+INSERT INTO ProductTes values (2, 'Pears baby Oil', 'Baby Cream');
+INSERT INTO ProductTest values (3, 'IPhone 7', 'Phone');
+INSERT INTO ProductTest values (4, 'Towel', 'House');
+INSERT INTO ProductTest values (5, 'PolyStar Washing Machine', 'Appliance');
+INSERT INTO ProductTest values (6, 'Blurthooth Headset', 'Gadjet')
+
+
+CREATE TABLE Products (
+    ProductID INT NOT NULL,
+    ProductName VARCHAR(255),
+    ProductDescription VARCHAR(255),
+	ManufacuturerID INT NOT NULL,
+
+    PRIMARY KEY (ProductID,ManufacuturerID),
+	
+);
+
+
+----To Populate the third table
+INSERT INTO Products values (1, 'Vaseline', 'Body Cream', 2);
+INSERT INTO Products values (2, 'Pears baby Oil', 'Baby Cream', 2);
+INSERT INTO Products values (3, 'IPhone 7', 'Phone', 1);
+INSERT INTO Products values (4, 'Towel', 'House', 3);
+INSERT INTO Products values (5, 'PolyStar Washing Machine', 'Appliance', 4);
+INSERT INTO Products values (6, 'Blurthooth Headset', 'Gadjet', 4)
+
+
+---To Create the Fourth Table
+CREATE TABLE Item (
+    ProductID INT NOT NULL,
+    CustomerID INT NOT NULL,
+    OrderID INT NOT NULL,
+    OrderAmount INT NOT NULL,
+    TransactionDate DATE,
+    ShipDate DATE,
+    PRIMARY KEY (ProductID,CustomerID,OrderID),
+	FOREIGN KEY (CustomerID,OrderID) REFERENCES CustomerOrder(CustomerID,OrderID),
+
+);
+
+
+----To Populate the Fourth table
+INSERT INTO Item values(1, 1, 4, 250, '2017-10-19', '2017-10-29');
+INSERT INTO Item values(2, 2, 3, 4100, '2018-10-09', '2018-12-20');
+INSERT INTO Item values(3, 3, 5, 42000, '2018-10-09', '2018-12-20');
+INSERT INTO Item values(4, 4, 6, 44000, '2018-10-09', '2018-12-20');
+INSERT INTO Item values(5, 5, 2, 44500, '2018-10-09', '2018-12-20');
+INSERT INTO Item values(6, 6, 1, 400300, '2018-10-09', '2018-12-20')
+
+
+CREATE TABLE Manufacturer (
+    ManufacturerName VARCHAR(255), 
+	ManufacuturerID INT NOT NULL,
+    ProductID INT NOT NULL,
+    PRIMARY KEY (ManufacuturerID,ProductID),
+	FOREIGN KEY (ProductID,ManufacuturerID) REFERENCES Products(ProductID,ManufacuturerID),
+	
+);
+
+
+
+
+INSERT INTO Manufacturer values ('Tam Corp', 2, 1);
+INSERT INTO Manufacturer values ('Tam Corp', 2, 2);
+INSERT INTO Manufacturer values ('Apple', 1, 3);
+INSERT INTO Manufacturer values ('JaneFash', 3, 4); 
+INSERT INTO Manufacturer values ('Polystar', 4, 5);
+INSERT INTO Manufacturer values ('Polystar', 4, 6)
+
+
+CREATE TABLE Distributor (
+    DistibutorName VARCHAR(255), 
+	DistributorID INT NOT NULL,
+	ManufacuturerID INT NOT NULL,
+	ProductID INT NOT NULL,
+    PRIMARY KEY (DistributorID,ManufacuturerID,ProductID),
+	FOREIGN KEY (ManufacuturerID,ProductID) REFERENCES Manufacturer(ManufacuturerID,ProductID),
+	
+);
+
+
+INSERT INTO Distributor values ('Leku Distributor', 1, 2, 1);
+INSERT INTO Distributor values ('Leku Distributor', 1, 2, 2);
+INSERT INTO Distributor values ('JaneFash Distributor', 2, 4, 5); 
+INSERT INTO Distributor values ('JaneFash Distributor', 2, 4, 6);
+INSERT INTO Distributor values ('Leku Distributor', 1, 3, 4);
+INSERT INTO Distributor values ('Trump Distributor', 3, 1, 3)
+
+
+CREATE TABLE Payment (
+    PaymentType VARCHAR(255), 
+	PaymentID INT NOT NULL,
+	CustomerID INT NOT NULL,
+	OrderID INT NOT NULL,
+	ProductID INT NOT NULL,
+	AMOUNT INT NOT NULL,
+    PRIMARY KEY (PaymentID),
+	FOREIGN KEY (ProductID,CustomerID,OrderID) REFERENCES Item(ProductID,CustomerID,OrderID),
+	
+);
+
+INSERT INTO Payment values ('Payee', 1, 6, 1, 6, 28000);
+INSERT INTO Payment values ('TamPay', 2, 5, 2, 5, 2590000);
+INSERT INTO Payment values ('VISA', 3, 3, 5, 3, 14350000);
+INSERT INTO Payment values ('VERVE', 4, 4, 6, 4, 12000);
+INSERT INTO Payment values ('Master', 5, 2, 3, 2, 500);
+INSERT INTO Payment values ('PayPal', 6, 1, 4, 1, 1000)
+
+SELECT * FROM Customer
+SELECT * FROM CustomerOrder
+SELECT * FROM Products
+SELECT * FROM Item
+SELECT * FROM Manufacturer
+SELECT * FROM Distributor
+SELECT * FROM Payment
